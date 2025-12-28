@@ -1,0 +1,404 @@
+<!doctype html>
+<html b:css='false' b:js='false' lang="ar" dir="rtl" xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+  <meta charset="utf-8">
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <title>أخبار اليوم</title>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --border: #e5e7eb;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #0ea5e9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.25px;
+    }
+
+    .section-heading a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .slider {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      margin-bottom: 28px;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 280ms ease;
+    }
+
+    .slide {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: stretch;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-content {
+      padding: 24px;
+      display: grid;
+      gap: 12px;
+      align-content: center;
+      border-inline-start: 1px solid var(--border);
+    }
+
+    .slide-content h3 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.2px;
+    }
+
+    .slide-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .slider-controls {
+      position: absolute;
+      inset-block-end: 14px;
+      inset-inline-end: 14px;
+      display: inline-flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .slider button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      font-weight: 700;
+      color: var(--text);
+      border-radius: 999px;
+      transition: background 120ms ease;
+    }
+
+    .slider button:hover {
+      background: #eef2f7;
+    }
+
+    @media (max-width: 1024px) {
+      .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .slide {
+        grid-template-columns: 1fr;
+      }
+
+      .slide img {
+        height: 240px;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 120ms ease, border-color 120ms ease;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #d4d8de;
+    }
+
+    .card img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 16px 16px 18px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .badge {
+      align-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(14, 165, 233, 0.08);
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.15px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 1024px) {
+    }
+
+    @media (max-width: 640px) {
+      .layout {
+        padding: 32px 18px 48px;
+      }
+
+      .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card img {
+        height: 150px;
+      }
+
+      .slider {
+        margin-bottom: 22px;
+      }
+
+      .slide-content {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <b:section class='layout' id='main' showaddelement='no'>
+    <b:widget id='FeaturedSlider' locked='false' title='الأخبار الأبرز' type='HTML'>
+      <b:includable id='main'>
+        <header class="section-heading">
+          <h2>الأخبار الأبرز</h2>
+          <a href="#">عرض الكل</a>
+        </header>
+        <section class="slider" aria-label="الأخبار الأبرز">
+          <div class="slides" data-slider-track>
+            <article class="slide">
+              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80" alt="مدينة حديثة عند الغروب">
+              <div class="slide-content">
+                <span class="badge">عاجل</span>
+                <h3>اجتماع قمة لبحث تحولات الاقتصاد الرقمي</h3>
+                <p>قادة التقنية والاستثمار يناقشون مستقبل الأسواق الناشئة وفرص التوسع في الذكاء الاصطناعي.</p>
+                <div class="meta">
+                  <span>الآن</span>
+                  <span>3 دقائق قراءة</span>
+                </div>
+              </div>
+            </article>
+            <article class="slide">
+              <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="مبانٍ زجاجية في قلب المدينة">
+              <div class="slide-content">
+                <span class="badge">اقتصاد</span>
+                <h3>ارتفاع الاستثمارات الخضراء في القطاع الخاص</h3>
+                <p>تسارع تمويل المشاريع المستدامة مع إطلاق حوافز حكومية جديدة لدعم الطاقة النظيفة.</p>
+                <div class="meta">
+                  <span>اليوم</span>
+                  <span>4 دقائق قراءة</span>
+                </div>
+              </div>
+            </article>
+            <article class="slide">
+              <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=1200&q=80" alt="سحاب أبيض فوق البحر الأزرق">
+              <div class="slide-content">
+                <span class="badge">تكنولوجيا</span>
+                <h3>منصة ذكاء اصطناعي جديدة لتحليل البيانات السحابية</h3>
+                <p>المنصة تدمج الخوارزميات التنبؤية مع لوحات قياس آنية لتسريع قرارات الأعمال.</p>
+                <div class="meta">
+                  <span>أمس</span>
+                  <span>5 دقائق قراءة</span>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="slider-controls">
+            <button type="button" aria-label="السابق" data-prev>‹</button>
+            <button type="button" aria-label="التالي" data-next>›</button>
+          </div>
+        </section>
+      </b:includable>
+    </b:widget>
+
+    <b:widget id='NewsGrid' locked='false' title='شبكة الأخبار' type='HTML'>
+      <b:includable id='main'>
+        <section class="section-heading">
+          <h2>أحدث الأخبار</h2>
+          <a href="#">عرض الكل</a>
+        </section>
+
+        <section class="news-grid" aria-label="شبكة الأخبار">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80" alt="منظر للمدينة عند الغروب">
+            <div class="card-body">
+              <span class="badge">اقتصاد</span>
+              <h3>ارتفاع أسواق الأسهم مع بداية الأسبوع الجديد</h3>
+              <p>تعافت المؤشرات الرئيسية بعد سلسلة من البيانات الإيجابية، وسط تفاؤل المستثمرين بالقطاع التكنولوجي.</p>
+              <div class="meta">
+                <span>اليوم</span>
+                <span>5 دقائق قراءة</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?auto=format&fit=crop&w=800&q=80" alt="سحابات فوق البحر">
+            <div class="card-body">
+              <span class="badge">تكنولوجيا</span>
+              <h3>إطلاق منصة ذكاء اصطناعي لدعم الشركات الناشئة</h3>
+              <p>الحل الجديد يوفر أدوات تحليل فورية تساعد الفرق الصغيرة على اتخاذ قرارات أسرع وتوسعة منتجاتها.</p>
+              <div class="meta">
+                <span>أمس</span>
+                <span>3 دقائق قراءة</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=800&q=80" alt="مباني زجاجية عصرية">
+            <div class="card-body">
+              <span class="badge">أعمال</span>
+              <h3>تقرير جديد يكشف ارتفاع الاستثمارات الخضراء</h3>
+              <p>شركات الطاقة النظيفة تجذب المزيد من التمويل مع توجه الحكومات لدعم المشاريع المستدامة.</p>
+              <div class="meta">
+                <span>منذ يومين</span>
+                <span>4 دقائق قراءة</span>
+              </div>
+            </div>
+          </article>
+        </section>
+      </b:includable>
+    </b:widget>
+  </b:section>
+
+  <script>
+    (function () {
+      const track = document.querySelector("[data-slider-track]");
+      const slides = Array.from(track.children);
+      const prev = document.querySelector("[data-prev]");
+      const next = document.querySelector("[data-next]");
+      let index = 0;
+
+      function update() {
+        const offset = index * -100;
+        track.style.transform = `translateX(${offset}%)`;
+      }
+
+      function go(step) {
+        index = (index + step + slides.length) % slides.length;
+        update();
+      }
+
+      prev.addEventListener("click", () => go(-1));
+      next.addEventListener("click", () => go(1));
+
+      let timer = setInterval(() => go(1), 7000);
+
+      [prev, next].forEach((btn) =>
+        btn.addEventListener("click", () => {
+          clearInterval(timer);
+          timer = setInterval(() => go(1), 7000);
+        })
+      );
+
+      window.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          clearInterval(timer);
+        } else {
+          timer = setInterval(() => go(1), 7000);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
